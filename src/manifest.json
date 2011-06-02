@@ -1,0 +1,12 @@
+{
+  "name": "No Bitcoin on HN",
+  "version": "1.0",
+  "description": "Hides Bitcoin stories.",
+  "content_scripts": [{
+    "matches": ["http://news.ycombinator.com/"],
+    "js": ["hide-bitcoin.js"]
+  }],
+  "permissions": [
+    "tabs", "http://news.ycombinator.com/"
+  ]
+}
