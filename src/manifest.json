@@ -1,10 +1,10 @@
 {
-  "name": "No Bitcoin on HN",
+  "name": "HN Filter",
   "version": "1.0",
-  "description": "Hides Bitcoin stories.",
+  "description": "Hides stories below a certain karma rating and filters for keywords.",
   "content_scripts": [{
     "matches": ["http://news.ycombinator.com/"],
-    "js": ["hide-bitcoin.js"]
+    "js": ["filter.js"]
   }],
   "permissions": [
     "tabs", "http://news.ycombinator.com/"
