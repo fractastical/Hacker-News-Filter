@@ -1,14 +1,12 @@
 
 Filter which provides customizable filters based on desirable or undesirable keywords on Hacker News.
 
-Example, via definition in hide.js :
+Example, via definition in filter.js :
 
 var filters = Object();
 	filters["default"] = 100; 
 	filters["heroku"] = 5;
 	filters["lolz"] = 600;
-	filters["python"] = 10;		
-	filters["rails"] = 45;
 
 This will show only articles with a karma score of over 100, unless one of the other keywords matches the title. If it does, it will show it if it is above the karma score listed and it will not show it if it is not.
 
