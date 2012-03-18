@@ -37,29 +37,6 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 					jQuery.get(td.firstChild.href, function(data) {
 						alert(data);
 					})		
-								
-					/* var xhr = new XMLHttpRequest();
-					xhr.onreadystatechange = handleStateChange(); // Implemented elsewhere.
-					//xhr.open("GET", td.firstChild.href, true);
-					//xhr.open("GET", "http://news.ycombinator.com/news", true);
-					xhr.open("GET", "http://news.ycombinator.com/x?fnid=YjwN2nzFAC", true);
-					xhr.send(); 
-					
-
-					function handleStateChange()
-					{
-						console.log('r');
-						console.log(xhr);
-					    if (xhr.readyState == 4) 
-					    {
-					        alert(xhr.responseText);
-					    }
-					    else
-					    {
-							console.log('nada');
-					    }
-					} */
-					
 					
 				}
 				
