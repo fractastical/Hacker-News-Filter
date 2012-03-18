@@ -1,13 +1,12 @@
 
 var filters = Object();
-	filters["default"] = 70; 
+	filters["default"] = 100; 
 	filters["rails"] = 40;
-	filters["heroku"] = 5;
-	filters["salesforce"] = 4;
-	filters["sap"] = 2;	
+	filters["python"] = 10;	
+	filters["linux"] = 10;	
 	filters["bitcoin"] = 150;	
-	filters["python"] = 333;	
-	filters["linux"] = 333;	
+	filters["heroku"] = 5;
+	filters["salesforce"] = 5;
 	
 				
 var tds = document.getElementsByTagName('td');
@@ -49,28 +48,21 @@ for(var index = 0; index < tds.length; index++)
 	}
 }
 function hn_filter_match(text, score)
-{
-		//console.log(text);
-		//console.log(score);
-		if(text.match("Best Ultrabook"))
-			console.log("utra");
-			
+{			
 		var remove = false;
 		
 		if(score < filters["default"])
 			remove = true;
 			
 		for (x in filters) {
-			//console.log(x);
-			if(x != "default" && text.match(x)) {
-				console.log("MATCH" + x + " " + filters[x]);
+			
+			if(x != "default" && text.toLowerCase().match(x)) {
 				if(score < filters[x])
 					remove = true;
 				else
 					remove = false;
 				}
 		}
-		console.log(score + " " + remove);
 
 		return remove;
 }
