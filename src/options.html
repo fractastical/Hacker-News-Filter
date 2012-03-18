@@ -1,0 +1,45 @@
+<html>
+<head><title>Options for Hacker News Filter</title></head>
+<script type="text/javascript">
+
+// Saves options to localStorage.
+function save_options() {
+
+  var values = document.getElementById("filterValues");
+  localStorage["filterValues"] = values.value;
+
+  // Update status to let user know options were saved.
+  var status = document.getElementById("status");
+  status.innerHTML = "Options Saved.";
+  setTimeout(function() {
+    status.innerHTML = "";
+  }, 750);
+
+}
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+	
+  var data = localStorage["filterValues"];
+  if (!data) {
+	data = "";
+    return;
+  }
+  var textarea = document.getElementById("filterValues");
+  textarea.value = data;
+
+}
+
+</script>
+
+<body onload="restore_options()">
+
+<p>Values in JSON: (ex. { "python" : 10, "bitcoin" : 400 })</p>
+
+<textarea id="filterValues" rows="3" size="30"></textarea>
+
+<div id="status">&nbsp;</div>
+<br>
+<button onclick="save_options()">Save</button>
+</body>
+</html>
