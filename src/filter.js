@@ -8,6 +8,10 @@ var filters = Object();
 	filters["heroku"] = 5;
 	filters["salesforce"] = 5;
 	
+	
+if(localStorage["filterValues"]) 
+	filters = JSON.parse(localStorage["filterValues"]);
+	
 				
 var tds = document.getElementsByTagName('td');
 var tdsToRemove = Array();
@@ -68,8 +72,6 @@ function hn_filter_match(text, score)
 					remove = false;
 				}
 		}
-		if(remove == true)
-			console.log(text);
 		return remove;
 }
 

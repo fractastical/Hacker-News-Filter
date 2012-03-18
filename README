@@ -4,7 +4,7 @@ Filter which provides customizable filters based on desirable or undesirable key
 Example, via definition in filter.js :
 
 var filters = Object();
-	filters["default"] = 100; # default min score
+	filters["default"] = 100; # default min karma score
 	filters["clojure"] = 5; # min score for specific desirable keyword
 	filters["bitcoin"] = 600; # min score for specific undesirable keyword
 
