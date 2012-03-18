@@ -7,11 +7,21 @@ var filters = Object();
 	filters["bitcoin"] = 150;	
 	filters["heroku"] = 5;
 	filters["salesforce"] = 5;
+
+	  console.log('w');	
+      var filterValues = "";
+	console.log("sending request");
+
+chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
+  console.log("resp" + response.data);
+  
+});
 	
-	
-if(localStorage["filterValues"]) 
-	filters = JSON.parse(localStorage["filterValues"]);
-	
+if(filterValues) 
+	filters = JSON.parse(filterValues);
+
+if(filterValues) 
+	  console.log('a');	
 				
 var tds = document.getElementsByTagName('td');
 var tdsToRemove = Array();
