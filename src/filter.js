@@ -13,8 +13,7 @@ var tds = document.getElementsByTagName('td');
 var tdsToRemove = Array();
 for(var index = 0; index < tds.length; index++)
 {
-	console.log(index + ":" + tds.length);
-
+	
 	var td = tds[index];
 	var score = 0;
 	
@@ -22,9 +21,7 @@ for(var index = 0; index < tds.length; index++)
 		td.getAttribute('class').indexOf('title') != -1 && 
 		td.firstChild && 
 		td.firstChild.tagName == 'A')
-	{
-		console.log(td.firstChild.text);
-		
+	{		
 		if(td.parentNode &&
 		   td.parentNode.nextSibling &&
 		   td.parentNode.nextSibling.firstChild &&
@@ -37,21 +34,15 @@ for(var index = 0; index < tds.length; index++)
 	       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 )
 			  score = parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
 
-		if(score == 0)
-			console.log("err" + td.firstChild.text);
-		//console.log(td.firstChild.text);
-
-		if(score == 0 && td.firstChild.text == "More")
-			console.log("load morrrrr");
+		//TODO: Autoload
+		//if(score == 0 && td.firstChild.text == "More")
 
 		if(score != 0 && hn_filter_match(td.firstChild.text, score)) 
-		{
 			tdsToRemove.push(td);
-		}
 	}
 }
-for (x in tdsToRemove) {
-
+for (x in tdsToRemove) 
+{
 	var td = tdsToRemove[x];
 	var tr1 = td.parentNode;
 	var tr2 = tr1.nextSibling;
@@ -59,8 +50,7 @@ for (x in tdsToRemove) {
 
 	tr1.parentNode.removeChild(tr1);
 	tr2.parentNode.removeChild(tr2);
-	tr3.parentNode.removeChild(tr3);
-	
+	tr3.parentNode.removeChild(tr3);	
 }
 function hn_filter_match(text, score)
 {			
