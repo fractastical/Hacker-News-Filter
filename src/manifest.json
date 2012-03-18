@@ -1,7 +1,7 @@
 {
   "name": "HN Filter",
   "version": "1.0",
-  "description": "Hides stories below a certain karma rating and filters for keywords.",
+  "description": "Filters stories by karma rating and keywords.",
   "content_scripts": [{
     "matches": ["http://news.ycombinator.com/"],
     "js": ["filter.js"]

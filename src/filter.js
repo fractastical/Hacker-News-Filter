@@ -36,11 +36,13 @@ for(var index = 0; index < tds.length; index++)
 
 
 
-		if(hn_filter_match(td.firstChild.text, score)) 
+		if(score != 0 && hn_filter_match(td.firstChild.text, score)) 
 		{
+			
 			var tr1 = td.parentNode;
 			var tr2 = tr1.nextSibling;
 			var tr3 = tr2.nextSibling;
+
 			tr1.parentNode.removeChild(tr1);
 			tr2.parentNode.removeChild(tr2);
 			tr3.parentNode.removeChild(tr3);
