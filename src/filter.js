@@ -1,5 +1,6 @@
 chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
+
  function(response) {
 
  	   var filters = JSON.parse(response.data);
@@ -31,9 +32,34 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 )
 					  score = parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
 
-				//TODO: Autoload
-				//if(score == 0 && td.firstChild.text == "More")
-				console.log(filters);
+				if(score == 0 && td.firstChild.text == "More")
+				{
+					
+					
+					console.log('xhr');
+					var xhr = new XMLHttpRequest();
+					xhr.onreadystatechange = handleStateChange(); // Implemented elsewhere.
+					//xhr.open("GET", td.firstChild.href, true);
+					//xhr.open("GET", "http://news.ycombinator.com/news", true);
+					xhr.open("GET", "http://news.ycombinator.com/x?fnid=YjwN2nzFAC", true);
+					xhr.send();
+
+					function handleStateChange()
+					{
+						console.log('r');
+						console.log(xhr);
+					    if (xhr.readyState == 4) 
+					    {
+					        alert(xhr.responseText);
+					    }
+					    else
+					    {
+							console.log('nada');
+					    }
+					}
+					
+					
+				}
 				
 				if(score != 0 && hn_filter_match(td.firstChild.text, score, filters)) 
 					tdsToRemove.push(td);
