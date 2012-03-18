@@ -1,72 +1,60 @@
+chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
-var filters = Object();
-	filters["default"] = 100; 
-	filters["rails"] = 40;
-	filters["python"] = 10;	
-	filters["linux"] = 10;	
-	filters["bitcoin"] = 150;	
-	filters["heroku"] = 5;
-	filters["salesforce"] = 5;
+ function(response) {
 
-	  console.log('w');	
-      var filterValues = "";
-	console.log("sending request");
+ 	   filters = JSON.parse(response.data);
+	   if(!filters["default"])
+			!filters["default"] = 1;
+			
+		var tds = document.getElementsByTagName('td');
+		var tdsToRemove = Array();
+		for(var index = 0; index < tds.length; index++)
+		{
 
-chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
-  console.log("resp" + response.data);
-  
+			var td = tds[index];
+			var score = 0;
+
+			if (td.getAttribute('class') &&
+				td.getAttribute('class').indexOf('title') != -1 && 
+				td.firstChild && 
+				td.firstChild.tagName == 'A')
+			{		
+				if(td.parentNode &&
+				   td.parentNode.nextSibling &&
+				   td.parentNode.nextSibling.firstChild &&
+				   td.parentNode.nextSibling.firstChild.nextSibling &&
+				   td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class') &&
+				   td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class').indexOf('subtext') != -1 &&
+			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild &&
+			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.tagName == 'SPAN' &&
+			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText &&
+			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 )
+					  score = parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
+
+				//TODO: Autoload
+				//if(score == 0 && td.firstChild.text == "More")
+
+				if(score != 0 && hn_filter_match(td.firstChild.text, score, filters)) 
+					tdsToRemove.push(td);
+			}
+		}
+		for (x in tdsToRemove) 
+		{
+			var td = tdsToRemove[x];
+			var tr1 = td.parentNode;
+			var tr2 = tr1.nextSibling;
+			var tr3 = tr2.nextSibling;
+
+			tr1.parentNode.removeChild(tr1);
+			tr2.parentNode.removeChild(tr2);
+			tr3.parentNode.removeChild(tr3);	
+		}
+
+
 });
 	
-if(filterValues) 
-	filters = JSON.parse(filterValues);
 
-if(filterValues) 
-	  console.log('a');	
-				
-var tds = document.getElementsByTagName('td');
-var tdsToRemove = Array();
-for(var index = 0; index < tds.length; index++)
-{
-	
-	var td = tds[index];
-	var score = 0;
-	
-	if (td.getAttribute('class') &&
-		td.getAttribute('class').indexOf('title') != -1 && 
-		td.firstChild && 
-		td.firstChild.tagName == 'A')
-	{		
-		if(td.parentNode &&
-		   td.parentNode.nextSibling &&
-		   td.parentNode.nextSibling.firstChild &&
-		   td.parentNode.nextSibling.firstChild.nextSibling &&
-		   td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class') &&
-		   td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class').indexOf('subtext') != -1 &&
-	       td.parentNode.nextSibling.firstChild.nextSibling.firstChild &&
-	       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.tagName == 'SPAN' &&
-	       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText &&
-	       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 )
-			  score = parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
-
-		//TODO: Autoload
-		//if(score == 0 && td.firstChild.text == "More")
-
-		if(score != 0 && hn_filter_match(td.firstChild.text, score)) 
-			tdsToRemove.push(td);
-	}
-}
-for (x in tdsToRemove) 
-{
-	var td = tdsToRemove[x];
-	var tr1 = td.parentNode;
-	var tr2 = tr1.nextSibling;
-	var tr3 = tr2.nextSibling;
-
-	tr1.parentNode.removeChild(tr1);
-	tr2.parentNode.removeChild(tr2);
-	tr3.parentNode.removeChild(tr3);	
-}
-function hn_filter_match(text, score)
+function hn_filter_match(text, score, filters)
 {			
 		var remove = false;
 		
