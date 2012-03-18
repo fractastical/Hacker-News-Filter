@@ -2,9 +2,9 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
  function(response) {
 
- 	   filters = JSON.parse(response.data);
+ 	   var filters = JSON.parse(response.data);
 	   if(!filters["default"])
-			!filters["default"] = 1;
+			filters["default"] = 1;
 			
 		var tds = document.getElementsByTagName('td');
 		var tdsToRemove = Array();
@@ -33,7 +33,8 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
 				//TODO: Autoload
 				//if(score == 0 && td.firstChild.text == "More")
-
+				console.log(filters);
+				
 				if(score != 0 && hn_filter_match(td.firstChild.text, score, filters)) 
 					tdsToRemove.push(td);
 			}
@@ -55,13 +56,16 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 	
 
 function hn_filter_match(text, score, filters)
-{			
+{		
+	    console.log(filters);
+		
 		var remove = false;
 		
 		if(score < filters["default"])
 			remove = true;
 			
 		for (x in filters) {
+			console.log(x);
 			
 			if(x != "default" && text.toLowerCase().match(x)) {
 				if(score < filters[x])

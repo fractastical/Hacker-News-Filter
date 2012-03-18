@@ -22,7 +22,7 @@ function restore_options() {
 	
   var data = localStorage["filterValues"];
   if (!data) {
-	data = "";
+	data = '{ "default" : 120, "rails" : 35,  "python" : 10, "germany" :5, "heroku":5, "bitcoin" : 150 }';
     return;
   }
   var textarea = document.getElementById("filterValues");
