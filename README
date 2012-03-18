@@ -16,3 +16,5 @@ Positive example: You want to see everything with "heroku" with a karma score of
 Negative example: you don't want to see anything with "lolz" unless it has over 600 karma.
 
 (Inspiration and first fork from: https://github.com/davidminor/No-Bitcoin-on-HN.git)
+
+TODO: Depagify. Mod filters on fly. 
