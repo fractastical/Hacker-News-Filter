@@ -6,6 +6,9 @@
     "matches": ["http://news.ycombinator.com/"],
     "js": ["filter.js"]
   }],
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
   "permissions": [
     "tabs", "http://news.ycombinator.com/"
   ]
