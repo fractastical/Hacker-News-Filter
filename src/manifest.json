@@ -3,7 +3,7 @@
   "version": "1.0",
   "description": "Filters stories by karma rating and keywords.",
   "content_scripts": [{
-    "matches": ["http://news.ycombinator.com/*", https://news.ycombinator.com/*"],
+    "matches": ["http://news.ycombinator.com/*", "https://news.ycombinator.com/*"],
     "js": ["filter.js"]
   }],
   "browser_action": {
