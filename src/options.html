@@ -6,8 +6,10 @@
 
    (1) Title
    (2) description
-   (3) filterValues - Json String of filters
+   (3) values - Json String of filters
    (4) pages - Number of Pages to display
+
+  There is also an active_filter toggle.
 
 */
 
@@ -15,8 +17,20 @@
 // Saves options to localStorage.
 function save_options() {
 
-  var textarea = document.getElementById("filterValues");
-  localStorage["filterValues"] = textarea.value;
+  var activeFilter = document.getElementById("active_filter");
+
+  var f1t = document.getElementById("filters_1_title");
+  var f1d = document.getElementById("filters_1_description");
+  var f1v = document.getElementById("filters_1_values");
+  var f1p = document.getElementById("filters_1_pages");
+
+  localStorage["filters_1_title"] = f1t.value;
+  localStorage["filters_1_description"] = f1d.value;
+  localStorage["filters_1_values"] = f1v.value;
+  localStorage["filters_1_pages"] = f1p.value;
+
+  activeFilter["active_filter"] = activeFilter.value;
+
 
   // Update status to let user know options were saved.
   var status = document.getElementById("status");
@@ -44,9 +58,21 @@ function restore_options() {
 
 <body onload="restore_options()">
 
+<p>Title</p>
+
+<input type="text" id="filters_1_title" size="40"/>
+
+<p>Description</p>
+
+<textarea id="filters_1_description" rows="2" cols="50"></textarea>
+
 <p>Values in JSON: (ex. { "python" : 10, "bitcoin" : 400 })</p>
 
-<textarea id="filterValues" rows="3" cols="50"></textarea>
+<textarea id="filters_1_values" rows="3" cols="50"></textarea>
+
+<p>Number of pages to display</p>
+
+<input type="text" id="filters_1_pages"/>
 
 <div id="status">&nbsp;</div>
 <br>
