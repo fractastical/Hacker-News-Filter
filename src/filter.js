@@ -1,8 +1,8 @@
 //TODO: Crazy namespacing here...
 chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
-	var filters = JSON.parse(response.data);
+	var filters = response.data ? JSON.parse(response.data) : { "default" : 1 };
 	if(!filters["default"])
-	filters["default"] = 1;
+		filters["default"] = 1;
 	filterDocument(0,filters);
 });
 	
@@ -38,7 +38,8 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 					td.parentNode.nextSibling.firstChild.nextSibling.firstChild &&
 					td.parentNode.nextSibling.firstChild.nextSibling.firstChild.tagName == 'SPAN' &&
 					td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText &&
-					td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 ) {
+					td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 )
+				{
 						score = parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
 				}
 
@@ -55,33 +56,28 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 				
 				}
 			
-				if(score !== 0 && hn_filter_match(td.firstChild.text, score, filters))
-					tdsToRemove.push(td);
+				if(score !== 0 && hn_filter_match(td.firstChild.text, score, filters)) {
+					remove_headline(td);
+				}
 			}
-		}
-
-		for (x in tdsToRemove)
-		{
-			console.log('h');
-			var td = tdsToRemove[x];
-			var tr1 = td.parentNode;
-			var tr2 = tr1.nextSibling;
-			var tr3 = tr2.nextSibling;
-
-			tr1.parentNode.removeChild(tr1);
-			tr2.parentNode.removeChild(tr2);
-			tr3.parentNode.removeChild(tr3);
 		}
 	}
 
+	function remove_headline(td) {
+		var tr1 = td.parentNode;
+		var tr2 = tr1.nextSibling;
+		var tr3 = tr2.nextSibling;
+
+		tr1.parentNode.removeChild(tr1);
+		tr2.parentNode.removeChild(tr2);
+		tr3.parentNode.removeChild(tr3);
+	}
+
 	function hn_filter_match(text, score, filters) {
-			var remove = false;
-		
-			if(score < filters["default"])
-				remove = true;
-			
+			var remove = score < filters["default"];
+
 			var t = text.toLowerCase();
-			
+
 			for (var x in filters) {
 				if(x != "default" && t.match(x)) {
 					remove = score < filters[x];
