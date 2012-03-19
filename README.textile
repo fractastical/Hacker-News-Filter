@@ -1,0 +1,22 @@
+
+Chrome extension which provides customizable filters based on desirable or undesirable keywords on Hacker News.
+
+*Set keyword-karma combinations via standard chrome options in JSON:*
+
+bq. { "default" : 100, "clojure" : 5, "bitcoin" : 250 }
+
+This will show only articles with a karma score of over 100, unless one of the other keywords matches the title. If it does, it will show it if it is above the karma score listed. If not, it will not show it.
+
+Example (positive): You want to see everything with "clojure" with a karma score of 5 or above.
+Example (negative): you don't want to see anything with "bitcoin" unless it has over 250 karma.
+
+The filters are applied in the order they appear, meaning that the last filter you apply will take precedence. 
+
+At the moment this is also setup to display eight pages of articles at once. This is especially useful for those of us don't check Hacker News every day or who are interested in obscure things.
+
+Author: "Jd":http://news.ycombinator.com/user?id=Jd ("@fractastical":https://twitter.com/fractastical)
+
+(Inspiration and first fork from No-Bitcoin-on-HN:"https://github.com/davidminor/No-Bitcoin-on-HN.git")
+
+
+
