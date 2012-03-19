@@ -1,13 +1,27 @@
+//TODO: Crazy namespacing here...
 chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
-
- function(response) {
-
- 	   var filters = JSON.parse(response.data);
-	   if(!filters["default"])
-			filters["default"] = 1;
-			
-		var tds = document.getElementsByTagName('td');
+	 function(response) {
+	   
+	 	   var filters = JSON.parse(response.data);
+		   if(!filters["default"])
+				filters["default"] = 1;
+		
+			filterDocument(document,document,0,filters);
+		
+	});
+	
+/*
+	params:
+	 	doc: document for items to be appended to
+		data: data to be used 
+		counter: number of times performed
+	
+*/
+	function filterDocument(doc,data,counter,filters) {	
+		console.log(counter);
+		counter++;
+		var tds = data.getElementsByTagName('td');
 		var tdsToRemove = Array();
 		for(var index = 0; index < tds.length; index++)
 		{
@@ -35,11 +49,14 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 				if(score == 0 && td.firstChild.text == "More")
 				{
 					jQuery.get(td.firstChild.href, function(data) {
-						alert(data);
+						$(data).find('tr').appendTo(td.parentNode.parentNode);
+						
+						if(counter < 3)
+							filterDocument(document,data,counter,filters);
 					})		
-					
-				}
 				
+				}
+			
 				if(score != 0 && hn_filter_match(td.firstChild.text, score, filters)) 
 					tdsToRemove.push(td);
 			}
@@ -57,28 +74,27 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 		}
 
 
-});
-	
+	}
 
-function hn_filter_match(text, score, filters)
-{		
-	    console.log(filters);
+	function hn_filter_match(text, score, filters)
+	{		
+		    console.log(filters);
 		
-		var remove = false;
+			var remove = false;
 		
-		if(score < filters["default"])
-			remove = true;
+			if(score < filters["default"])
+				remove = true;
 			
-		for (x in filters) {
-			console.log(x);
+			for (x in filters) {
+				console.log(x);
 			
-			if(x != "default" && text.toLowerCase().match(x)) {
-				if(score < filters[x])
-					remove = true;
-				else
-					remove = false;
-				}
-		}
-		return remove;
-}
+				if(x != "default" && text.toLowerCase().match(x)) {
+					if(score < filters[x])
+						remove = true;
+					else
+						remove = false;
+					}
+			}
+			return remove;
+	}
 
