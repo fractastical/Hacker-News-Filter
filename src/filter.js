@@ -15,8 +15,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	function filterDocument(counter,filters) {
 		counter++;
 		var tds = document.querySelectorAll('td[class="title"]');
-
-		
+		//document.querySelector('a[href^="/x?fnid"]')
 
 		for(var index = 0; index < tds.length; index++)
 		{
@@ -42,6 +41,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 						score = parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
 				}
 
+				/*
 				if(score === 0 && td.firstChild.text == "More")
 				{
 					var tablebody = td.parentNode.parentNode;
@@ -54,6 +54,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 					});
 				
 				}
+				*/
 			
 				if(score !== 0 && hn_filter_match(td.firstChild.text, score, filters)) {
 					remove_headline(td);
