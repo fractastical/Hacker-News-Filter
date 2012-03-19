@@ -48,8 +48,6 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
 				if(score == 0 && td.firstChild.text == "More")
 				{
-					console.log('what');
-					console.log(td);
 					var tablebody = td.parentNode.parentNode;
 					$(td).remove();
 					jQuery.get(td.firstChild.href, function(data) {
