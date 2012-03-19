@@ -7,7 +7,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 		   if(!filters["default"])
 				filters["default"] = 1;
 		
-			filterDocument(document,document,0,filters);
+			filterDocument(0,filters);
 		
 	});
 	
@@ -18,16 +18,16 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 		counter: number of times performed
 	
 */
-	function filterDocument(doc,data,counter,filters) {	
-		console.log(counter);
+	function filterDocument(counter,filters) {	
 		counter++;
-		var tds = data.getElementsByTagName('td');
+		var tds = document.getElementsByTagName('td');
 		var tdsToRemove = Array();
 		for(var index = 0; index < tds.length; index++)
 		{
 
 			var td = tds[index];
 			var score = 0;
+			var nextRowSet;
 
 			if (td.getAttribute('class') &&
 				td.getAttribute('class').indexOf('title') != -1 && 
@@ -48,11 +48,15 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
 				if(score == 0 && td.firstChild.text == "More")
 				{
+					console.log('what');
+					console.log(td);
+					var tablebody = td.parentNode.parentNode;
+					$(td).remove();
 					jQuery.get(td.firstChild.href, function(data) {
-						$(data).find('tr').appendTo(td.parentNode.parentNode);
 						
-						if(counter < 3)
-							filterDocument(document,data,counter,filters);
+						$(data).find('table table tr').slice(4).appendTo(tablebody);
+						if(counter < 8)
+						  	filterDocument(counter,filters);						
 					})		
 				
 				}
@@ -63,6 +67,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 		}
 		for (x in tdsToRemove) 
 		{
+			console.log('h');
 			var td = tdsToRemove[x];
 			var tr1 = td.parentNode;
 			var tr2 = tr1.nextSibling;
@@ -78,7 +83,6 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 
 	function hn_filter_match(text, score, filters)
 	{		
-		    console.log(filters);
 		
 			var remove = false;
 		
@@ -86,7 +90,6 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
 				remove = true;
 			
 			for (x in filters) {
-				console.log(x);
 			
 				if(x != "default" && text.toLowerCase().match(x)) {
 					if(score < filters[x])
