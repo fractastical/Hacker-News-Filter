@@ -5,8 +5,6 @@ Chrome extension which provides customizable filters based on desirable or undes
 
 bq. { "default" : 100, "clojure" : 5, "bitcoin" : 250 }
 
-!options_example.png!
-
 This will show only articles with a karma score of over 100, unless one of the other keywords matches the title. If it does, it will show it if it is above the karma score listed. If not, it will not show it.
 
 *Example (positive):* You want to see everything with "clojure" with a karma score of 5 or above.
@@ -19,6 +17,13 @@ At the moment this is also setup to display eight pages of articles at once. Thi
 Author: "Jd":http://news.ycombinator.com/user?id=Jd ("@fractastical":https://twitter.com/fractastical)
 
 Inspiration and first fork from "No-Bitcoin-on-HN":https://github.com/davidminor/No-Bitcoin-on-HN.git
+
+
+My setup at the moment:
+
+!https://github.com/fractastical/Hacker-News-Filter/blob/master/options_example.png!
+
+
 
 
 
