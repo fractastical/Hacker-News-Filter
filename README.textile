@@ -21,7 +21,7 @@ Inspiration and first fork from "No-Bitcoin-on-HN":https://github.com/davidminor
 
 My setup at the moment:
 
-!https://github.com/fractastical/Hacker-News-Filter/blob/master/options_example.png!
+!https://github.com/fractastical/Hacker-News-Filter/raw/master/options_example.png!
 
 
 
