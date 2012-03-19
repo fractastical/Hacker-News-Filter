@@ -72,27 +72,22 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 			tr2.parentNode.removeChild(tr2);
 			tr3.parentNode.removeChild(tr3);
 		}
-
-
 	}
 
-	function hn_filter_match(text, score, filters)
-	{
-		
+	function hn_filter_match(text, score, filters) {
 			var remove = false;
 		
 			if(score < filters["default"])
 				remove = true;
 			
-			for (x in filters) {
+			var t = text.toLowerCase();
 			
-				if(x != "default" && text.toLowerCase().match(x)) {
-					if(score < filters[x])
-						remove = true;
-					else
-						remove = false;
-					}
+			for (var x in filters) {
+				if(x != "default" && t.match(x)) {
+					remove = score < filters[x];
+				}
 			}
+
 			return remove;
 	}
 
