@@ -14,8 +14,9 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 */
 	function filterDocument(counter,filters) {
 		counter++;
-		var tds = document.getElementsByTagName('td');
-		var tdsToRemove = [];
+		var tds = document.querySelectorAll('td[class="title"]');
+
+		
 
 		for(var index = 0; index < tds.length; index++)
 		{
@@ -24,9 +25,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 			var score = 0;
 			var nextRowSet;
 
-			if (td.getAttribute('class') &&
-				td.getAttribute('class').indexOf('title') != -1 &&
-				td.firstChild &&
+			if (td.firstChild &&
 				td.firstChild.tagName == 'A')
 			{
 				if(td.parentNode &&
