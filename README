@@ -1,22 +1,22 @@
 
 Filter which provides customizable filters based on desirable or undesirable keywords on Hacker News.
 
-Example, via definition in filter.js :
+Set options via standard chrome options in JSON:
 
-var filters = Object();
-	filters["default"] = 100; # default min karma score
-	filters["clojure"] = 5; # min score for specific desirable keyword
-	filters["bitcoin"] = 600; # min score for specific undesirable keyword
+{ "default" : 100, "clojure" : 5, "bitcoin" : 250 }
 
-This will show only articles with a karma score of over 100, unless one of the other keywords matches the title. If it does, it will show it if it is above the karma score listed and it will not show it if it is not.
+This will show only articles with a karma score of over 100, unless one of the other keywords matches the title. If it does, it will show it if it is above the karma score listed. If not, it will not show it.
 
-Positive example: You want to see everything with "clojure" with a karma score of 5 or above.
-Negative example: you don't want to see anything with "bitcoin" unless it has over 600 karma.
+Example (positive): You want to see everything with "clojure" with a karma score of 5 or above.
+Example (negative): you don't want to see anything with "bitcoin" unless it has over 250 karma.
 
 The filters are applied in the order they appear, meaning that the last filter you apply will take precedence. 
+
+At the moment this is also setup to display eight pages of articles at once. This is especially useful for those of us who only check Hacker News every couple of days.
+
+Author: http://news.ycombinator.com/user?id=Jd (@fractastical)
 
 (Inspiration and first fork from: https://github.com/davidminor/No-Bitcoin-on-HN.git)
 
 
 
-TODO: Depagify. Mod filters on fly. 
