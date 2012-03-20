@@ -1,17 +1,19 @@
-chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
+chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues"}, function(response) {
+
+
+	var activeFilter = response.data1 ? response.data1 : "standard";
+	var options = response.data2 ? JSON.parse(response.data2)[activeFilter] : { };
 	
-	var options = response.data ? JSON.parse(response.data) : { };
-	var defaultmin = options['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
-	if(options['default']) delete options['default'];
+	var defaultmin = options['data']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
+	var pagesToDisplay = options['pages'] || 1;
+	if(options['data']['default'] ) delete options['data']['default'] ;
 
 	expand_more_links(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
-			8,
+			pagesToDisplay,
 			function(){ filterDocument(defaultmin, options); }
 			);
 });
-
-
 
 function filterDocument(defaultmin, filters) {
 	
@@ -77,8 +79,11 @@ function hn_filter_match(text, score, filters, defaultmin) {
 	var t = text.toLowerCase();
 
 	for (var x in filters) {
-		if(t.match(x) && score > filters[x]) {
-			remove = false;
+		if(t.match(x)) {
+			if(score > filters[x])
+				remove = false;
+			else
+				remove = true;
 		}
 	}
 

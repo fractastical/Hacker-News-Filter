@@ -4,9 +4,9 @@
     <title>Background Page</title>
     <script>
 	chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-		console.log("alive");
+		console.log('alive');
 	    if (request.method == "getLocalStorage")
-	      sendResponse({data: localStorage[request.key]});
+	      sendResponse({data1: localStorage[request.key1], data2: localStorage[request.key2]});
 	    else
 	      sendResponse({}); // snub them.
 	});
