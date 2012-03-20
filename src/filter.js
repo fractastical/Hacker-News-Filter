@@ -20,28 +20,22 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 		data: data to be used
 */
 	function filterDocument(filters) {
+		// Follows the More links, adds them to the table, and deletes them
 		expand_more_link(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
 			5
 			);
-				
-		var tds = document.querySelectorAll('td[class="title"]');
-		var rows = document.querySelectorAll('td[class="title"]')
-			.map(function(node){ return node.parentNode; });
 		
-		
+		var links = document.querySelectorAll('td[class="title"] a');
 
-		for(var i = 0, l = tds.length; i < l; i++)
+		for(var i = 0, l = links.length; i < l; i++)
 		{
-			var td = tds[i];
+			var link = links[i];
 
-			if (td.firstChild && td.firstChild.tagName == 'A')
-			{
-				var score = get_headline_score(td);
-				
-				if(score !== 0 && hn_filter_match(td.firstChild.text, score, filters)) {
-					remove_headline(td);
-				}
+			var score = get_headline_score(link);
+			
+			if(score !== 0 && hn_filter_match(link.textContent, score, filters)) {
+				remove_headline(link);
 			}
 		}
 	}
@@ -50,53 +44,45 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	function expand_more_link(search, count){
 		if(count < 1) return;
 
-		/*
-		if(score === 0 && td.firstChild.text == "More")
-		{
-			var tablebody = td.parentNode.parentNode;
-			$(td).remove();
-			jQuery.get(td.firstChild.href, function(data) {
-				$(data).find('table table tr').slice(4).appendTo(tablebody);
-				if(counter < 8) {
-					filterDocument(counter,filters);
-				}
-			});
-		
-		}
-		*/
+		var link = search(document);
+		if(!link) return;
+
+		var href = link.href;
+		link.parentNode.removeChild(link);
+
+		//var tablebody = link.parentNode.parentNode;
+		//$(td).remove();
+		//jQuery.get(td.firstChild.href, function(data) {
+		//	$(data).find('table table tr').slice(4).appendTo(tablebody);
+		//});
+
+		//expand_more_link(search, --count);
 	}
 
-	function get_headline_score(td) {
-		if(td.parentNode &&
-					td.parentNode.nextSibling &&
-					td.parentNode.nextSibling.firstChild &&
-					td.parentNode.nextSibling.firstChild.nextSibling &&
-					td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class') &&
-					td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class').indexOf('subtext') != -1 &&
-					td.parentNode.nextSibling.firstChild.nextSibling.firstChild &&
-					td.parentNode.nextSibling.firstChild.nextSibling.firstChild.tagName == 'SPAN' &&
-					td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText &&
-					td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 )
-		{
-				return parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
-		}
-		return 0;
+	function get_headline_score(link) {
+		var subtext = link.parentNode.parentNode.nextSibling;
+		if(!subtext) console.log(link);
+		var scoretext = subtext.querySelector('span[id^="score"]');
+		if(!scoretext) return 0;
+
+		return parseInt(scoretext.textContent.split(' ')[0].textContent, 10);
 	}
 
-	function remove_headline(td) {
-		var tr1 = td.parentNode;
-		var tr2 = tr1.nextSibling;
-		var tr3 = tr2.nextSibling;
+	function remove_headline(link) {
+		var headline = link.parentNode.parentNode;
+		var parent = headline.parentNode;
+		var subtext = headline.nextSibling;
+		var spacer = subtext.nextSibling;
 
-		tr1.parentNode.removeChild(tr1);
-		tr2.parentNode.removeChild(tr2);
-		tr3.parentNode.removeChild(tr3);
+		parent.removeChild(headline);
+		parent.removeChild(subtext);
+		parent.removeChild(spacer);
 	}
 
 	function hn_filter_match(text, score, filters) {
 
 			var remove = score < filters["default"];
-			console.log('score:' + score + ' defaults:' + filters['default']);
+			//console.log('score:' + score + ' defaults:' + filters['default']);
 			var t = text.toLowerCase();
 
 			for (var x in filters) {
