@@ -80,6 +80,5 @@ function hn_filter_match(text, score, filters, defaultmin) {
 			remove = score < filters[x];
 		}
 	}
-
 	return remove;
 }
