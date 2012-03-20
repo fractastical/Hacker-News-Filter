@@ -25,8 +25,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 			var link = links[i];
 
 			var score = get_headline_score(link);
-			
-			if(score !== 0 && hn_filter_match(link.textContent, score, filters)) {
+			if(score && hn_filter_match(link.textContent, score, filters)) {
 				remove_headline(link);
 			}
 		}
@@ -73,7 +72,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	function hn_filter_match(text, score, filters) {
 
 			var remove = score < filters["default"];
-			console.log('score:' + score + ' defaults:' + filters['default']);
+
 			var t = text.toLowerCase();
 
 			for (var x in filters) {
