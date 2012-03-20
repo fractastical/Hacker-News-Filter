@@ -1,12 +1,8 @@
 chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues"}, function(response) {
 
 
-    console.log(response);
-	
 	var activeFilter = response.data1 ? response.data1 : "standard";
 	var options = response.data2 ? JSON.parse(response.data2)[activeFilter] : { };
-
-    console.log(options);
 	
 	var defaultmin = options['data']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
 	var pagesToDisplay = options['pages'] || 1;
