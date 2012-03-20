@@ -6,14 +6,6 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	filterDocument(options);
 });
 
-
-	NodeList.prototype.map = function(m){
-		var result = [];
-		for (var i = 0, l = this.length; i < l; i++) {
-			result.push(m(this[i]));
-		}
-		return result;
-	};
 /*
 	params:
 		doc: document for items to be appended to
