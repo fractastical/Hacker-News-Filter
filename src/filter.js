@@ -11,7 +11,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", k
 	expand_more_links(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
 			pagesToDisplay,
-			function(){ filterDocument(defaultmin, options); }
+			function(){ filterDocument(defaultmin, options['data']); }
 			);
 });
 
