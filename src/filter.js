@@ -1,11 +1,16 @@
-chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues"}, function(response1, response2) {
+chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues"}, function(response) {
+
+
+    console.log(response);
 	
-	var activeFilter = response1.data ? JSON.parse(response1.data) : "standard";
-	var options = response2.data ? JSON.parse(response2.data)[activeFilter] : { };
+	var activeFilter = response.data1 ? response.data1 : "standard";
+	var options = response.data2 ? JSON.parse(response.data2)[activeFilter] : { };
+
+    console.log(options);
 	
-	var defaultmin = options['values']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
+	var defaultmin = options['data']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
 	var pagesToDisplay = options['pages'] || 1;
-	if(options['values']['default'] ) delete options['values']['default'] ;
+	if(options['data']['default'] ) delete options['data']['default'] ;
 
 	expand_more_links(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
@@ -13,8 +18,6 @@ chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", k
 			function(){ filterDocument(defaultmin, options); }
 			);
 });
-
-
 
 function filterDocument(defaultmin, filters) {
 	
