@@ -12,7 +12,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 		data: data to be used
 */
 	function filterDocument(filters) {
-		// Follows the More links, adds them to the table, and deletes them
+		// Follows the More links, adds the results to the table, and deletes them
 		expand_more_link(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
 			5
