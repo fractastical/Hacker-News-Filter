@@ -31,7 +31,7 @@ function filterDocument(defaultmin, filters) {
 
 
 function expand_more_links(search, count, success){
-	if(count < 1){
+	if(count < 2){
 		success();
 		return;
 	}
