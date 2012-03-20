@@ -66,12 +66,10 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	function remove_headline(link) {
 		var headline = link.parentNode.parentNode;
 		var parent = headline.parentNode;
-		var subtext = headline.nextSibling;
-		var spacer = subtext.nextSibling;
-
+		
+		parent.removeChild(headline.nextSibling.nextSibling);
+		parent.removeChild(headline.nextSibling);
 		parent.removeChild(headline);
-		parent.removeChild(subtext);
-		parent.removeChild(spacer);
 	}
 
 	function hn_filter_match(text, score, filters) {
