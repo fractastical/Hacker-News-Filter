@@ -53,11 +53,10 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 
 	function get_headline_score(link) {
 		var subtext = link.parentNode.parentNode.nextSibling;
-		if(!subtext) console.log(link);
 		var scoretext = subtext.querySelector('span[id^="score"]');
 		if(!scoretext) return 0;
 
-		return parseInt(scoretext.textContent.split(' ')[0].textContent, 10);
+		return parseInt(scoretext.textContent.split(' ')[0], 10);
 	}
 
 	function remove_headline(link) {
@@ -74,7 +73,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	function hn_filter_match(text, score, filters) {
 
 			var remove = score < filters["default"];
-			//console.log('score:' + score + ' defaults:' + filters['default']);
+			console.log('score:' + score + ' defaults:' + filters['default']);
 			var t = text.toLowerCase();
 
 			for (var x in filters) {
