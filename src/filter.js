@@ -3,7 +3,12 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	var options = response.data ? JSON.parse(response.data) : { };
 	var defaultmin = options['default'] || 1;
 	delete options['default'];
-	filterDocument(defaultmin, options);
+
+	expand_more_links(
+			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
+			5,
+			function(){ filterDocument(defaultmin, options); }
+			);
 });
 
 /*
@@ -13,10 +18,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 */
 	function filterDocument(defaultmin, filters) {
 		// Follows the More links, adds the results to the table, and deletes them
-		expand_more_link(
-			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
-			5
-			);
+		
 		
 		var links = document.querySelectorAll('td[class="title"] a');
 
@@ -32,8 +34,11 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 	}
 
 
-	function expand_more_link(search, count){
-		if(count < 1) return;
+	function expand_more_links(search, count, success){
+		if(count < 1){
+			success();
+			return;
+		}
 
 		var link = search(document);
 		if(!link) return;
@@ -50,7 +55,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 		// Follow more link and add results to the table
 		jQuery.get(href, function(data) {
 			table.appendChild($(data).find('table table tbody')[1]);
-			expand_more_link(search, --count);
+			expand_more_links(search, --count, success);
 		});
 	}
 
@@ -84,5 +89,6 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 				}
 			}
 
+			console.log('remove: ' + remove + ' score:' + score);
 			return remove;
 	}
