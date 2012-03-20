@@ -13,24 +13,22 @@
 
 */
 
-
 // Saves options to localStorage.
 function save_options() {
 
   var activeFilter = document.getElementById("active_filter");
 
-  var f1t = document.getElementById("filters_1_title");
-  var f1d = document.getElementById("filters_1_description");
-  var f1v = document.getElementById("filters_1_values");
-  var f1p = document.getElementById("filters_1_pages");
+  var f1t = document.getElementById("filter_1_title");
+  var f1d = document.getElementById("filter_1_description");
+  var f1v = document.getElementById("filter_1_values");
+  var f1p = document.getElementById("filter_1_pages");
 
-  localStorage["filters_1_title"] = f1t.value;
-  localStorage["filters_1_description"] = f1d.value;
-  localStorage["filters_1_values"] = f1v.value;
-  localStorage["filters_1_pages"] = f1p.value;
+  localStorage["filter_1_title"] = f1t.value;
+  localStorage["filter_1_description"] = f1d.value;
+  localStorage["filter_1_values"] = f1v.value;
+  localStorage["filter_1_pages"] = f1p.value;
 
   activeFilter["active_filter"] = activeFilter.value;
-
 
   // Update status to let user know options were saved.
   var status = document.getElementById("status");
@@ -44,13 +42,34 @@ function save_options() {
 // Restores select box state to saved value from localStorage.
 function restore_options() {
 	
+  localStorage["filter_1_title"] = f1t.value;
+  localStorage["filter_1_description"] = f1d.value;
+  localStorage["filter_1_values"] = f1v.value;
+  localStorage["filter_1_pages"] = f1p.value;	
+	
   var data = localStorage["filterValues"];
   if (!data) {
 	data = '{ "default" : 120, "rails" : 35, "python" : 10, "germany" : 5, "france" : 5, "heroku": 5, "bitcoin" : 170 }';
-    return;
   }
   var textarea = document.getElementById("filterValues");
   textarea.value = data;
+
+
+	var activeFilter = localStorage["active_filter"];
+  if (!favorite) {
+    return;
+  }
+  
+  	var select = document.getElementById("activeFilter");
+	for (var i = 0; i < select.children.length; i++) {
+	  var child = select.children[i];
+	  var child.	
+	  if (child.value == favorite) {
+	    child.selected = "true";
+	    break;
+	  }
+	}
+  
 
 }
 
@@ -58,21 +77,30 @@ function restore_options() {
 
 <body onload="restore_options()">
 
+	Active Filter:
+	<select id="activeFilter">
+	 <option value="1">1</option>
+	 <option value="2">2</option>
+	 <option value="3">3</option>
+	 <option value="4">4</option>
+
+	</select>
+
 <p>Title</p>
 
-<input type="text" id="filters_1_title" size="40"/>
+<input type="text" id="filter_1_title" size="40"/>
 
 <p>Description</p>
 
-<textarea id="filters_1_description" rows="2" cols="50"></textarea>
+<textarea id="filter_1_description" rows="2" cols="50"></textarea>
 
 <p>Values in JSON: (ex. { "python" : 10, "bitcoin" : 400 })</p>
 
-<textarea id="filters_1_values" rows="3" cols="50"></textarea>
+<textarea id="filter_1_values" rows="3" cols="50"></textarea>
 
 <p>Number of pages to display</p>
 
-<input type="text" id="filters_1_pages"/>
+<input type="text" id="filter_1_pages"/>
 
 <div id="status">&nbsp;</div>
 <br>
