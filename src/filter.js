@@ -77,8 +77,11 @@ function hn_filter_match(text, score, filters, defaultmin) {
 	var t = text.toLowerCase();
 
 	for (var x in filters) {
-		if(t.match(x) && score > filters[x]) {
-			remove = false;
+		if(t.match(x)) {
+			if(score > filters[x])
+				remove = false;
+			else
+				remove = true;
 		}
 	}
 
