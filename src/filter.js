@@ -1,7 +1,8 @@
 chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
+	
 	var options = response.data ? JSON.parse(response.data) : { };
-	var defaultmin = options['default'] || 1;
-	delete options['default'];
+	var defaultmin = options['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
+	if(options['default']) delete options['default'];
 
 	expand_more_links(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
@@ -11,6 +12,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 });
 
 
+
 function filterDocument(defaultmin, filters) {
 	
 	var links = document.querySelectorAll('td[class="title"] a');
@@ -18,7 +20,6 @@ function filterDocument(defaultmin, filters) {
 	for(var i = 0, l = links.length; i < l; i++)
 	{
 		var link = links[i];
-
 		var score = get_headline_score(link);
 		if(score && hn_filter_match(link.textContent, score, filters, defaultmin)) {
 			remove_headline(link);
@@ -76,9 +77,10 @@ function hn_filter_match(text, score, filters, defaultmin) {
 	var t = text.toLowerCase();
 
 	for (var x in filters) {
-		if(t.match(x)) {
-			remove = score < filters[x];
+		if(t.match(x) && score > filters[x]) {
+			remove = false;
 		}
 	}
+
 	return remove;
 }
