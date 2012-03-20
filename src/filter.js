@@ -1,9 +1,9 @@
 //TODO: Crazy namespacing here...
 chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
-	var options = response.data ? JSON.parse(response.data) : { "default" : 1 };
-	if(!options["default"])
-		options["default"] = 1;
-	filterDocument(options);
+	var options = response.data ? JSON.parse(response.data) : { };
+	var defaultmin = options['default'] || 1;
+	delete options['default'];
+	filterDocument(defaultmin, options);
 });
 
 /*
@@ -11,7 +11,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 		doc: document for items to be appended to
 		data: data to be used
 */
-	function filterDocument(filters) {
+	function filterDocument(defaultmin, filters) {
 		// Follows the More links, adds the results to the table, and deletes them
 		expand_more_link(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
@@ -25,7 +25,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 			var link = links[i];
 
 			var score = get_headline_score(link);
-			if(score && hn_filter_match(link.textContent, score, filters)) {
+			if(score && hn_filter_match(link.textContent, score, filters, defaultmin)) {
 				remove_headline(link);
 			}
 		}
@@ -72,14 +72,14 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 		parent.removeChild(headline);
 	}
 
-	function hn_filter_match(text, score, filters) {
+	function hn_filter_match(text, score, filters, defaultmin) {
 
-			var remove = score < filters["default"];
+			var remove = score < defaultmin;
 
 			var t = text.toLowerCase();
 
 			for (var x in filters) {
-				if(x != "default" && t.match(x)) {
+				if(t.match(x)) {
 					remove = score < filters[x];
 				}
 			}
