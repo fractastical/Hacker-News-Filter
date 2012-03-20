@@ -1,101 +1,86 @@
-//TODO: Crazy namespacing here...
-chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"},
+chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
+	
+	var options = response.data ? JSON.parse(response.data) : { };
+	var defaultmin = options['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
+	if(options['default']) delete options['default'];
 
-	 function(response) {
-	   
-	 	   var filters = JSON.parse(response.data);
-		   if(!filters["default"])
-				filters["default"] = 1;
-		
-			filterDocument(0,filters);
-		
+	expand_more_links(
+			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
+			8,
+			function(){ filterDocument(defaultmin, options); }
+			);
+});
+
+
+
+function filterDocument(defaultmin, filters) {
+	
+	var links = document.querySelectorAll('td[class="title"] a');
+
+	for(var i = 0, l = links.length; i < l; i++)
+	{
+		var link = links[i];
+		var score = get_headline_score(link);
+		if(score && hn_filter_match(link.textContent, score, filters, defaultmin)) {
+			remove_headline(link);
+		}
+	}
+}
+
+
+function expand_more_links(search, count, success){
+	if(count < 1){
+		success();
+		return;
+	}
+
+	var link = search(document);
+	if(!link) return;
+
+	var href = link.href;
+	var table = link.parentNode.parentNode.parentNode.parentNode;
+	
+	// Remove link and spacer
+	var row = link.parentNode.parentNode;
+	var parent = link.parentNode.parentNode.parentNode;
+	parent.removeChild(row.previousSibling);
+	parent.removeChild(row);
+
+	// Follow more link and add results to the table
+	jQuery.get(href, function(data) {
+		table.appendChild($(data).find('table table tbody')[1]);
+		expand_more_links(search, --count, success);
 	});
+}
+
+function get_headline_score(link) {
+	var subtext = link.parentNode.parentNode.nextSibling;
+	if(!subtext) return 0;
+	var scoretext = subtext.querySelector('span[id^="score"]');
+	if(!scoretext) return 0;
+
+	return parseInt(scoretext.textContent.split(' ')[0], 10);
+}
+
+function remove_headline(link) {
+	var headline = link.parentNode.parentNode;
+	var parent = headline.parentNode;
 	
-/*
-	params:
-	 	doc: document for items to be appended to
-		data: data to be used 
-		counter: number of times performed
-	
-*/
-	function filterDocument(counter,filters) {	
-		counter++;
-		var tds = document.getElementsByTagName('td');
-		var tdsToRemove = Array();
-		for(var index = 0; index < tds.length; index++)
-		{
+	parent.removeChild(headline.nextSibling.nextSibling);
+	parent.removeChild(headline.nextSibling);
+	parent.removeChild(headline);
+}
 
-			var td = tds[index];
-			var score = 0;
-			var nextRowSet;
+function hn_filter_match(text, score, filters, defaultmin) {
+	var remove = score < defaultmin;
 
-			if (td.getAttribute('class') &&
-				td.getAttribute('class').indexOf('title') != -1 && 
-				td.firstChild && 
-				td.firstChild.tagName == 'A')
-			{		
-				if(td.parentNode &&
-				   td.parentNode.nextSibling &&
-				   td.parentNode.nextSibling.firstChild &&
-				   td.parentNode.nextSibling.firstChild.nextSibling &&
-				   td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class') &&
-				   td.parentNode.nextSibling.firstChild.nextSibling.getAttribute('class').indexOf('subtext') != -1 &&
-			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild &&
-			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.tagName == 'SPAN' &&
-			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText &&
-			       td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.indexOf(' ') != -1 )
-					  score = parseInt(td.parentNode.nextSibling.firstChild.nextSibling.firstChild.innerText.split(' ')[0]);
+	var t = text.toLowerCase();
 
-				if(score == 0 && td.firstChild.text == "More")
-				{
-					var tablebody = td.parentNode.parentNode;
-					$(td).remove();
-					jQuery.get(td.firstChild.href, function(data) {
-						
-						$(data).find('table table tr').slice(4).appendTo(tablebody);
-						if(counter < 8)
-						  	filterDocument(counter,filters);						
-					})		
-				
-				}
-			
-				if(score != 0 && hn_filter_match(td.firstChild.text, score, filters)) 
-					tdsToRemove.push(td);
-			}
+	for (var x in filters) {
+		if(t.match(x) && score > filters[x]) {
+			remove = false;
 		}
-		for (x in tdsToRemove) 
-		{
-			console.log('h');
-			var td = tdsToRemove[x];
-			var tr1 = td.parentNode;
-			var tr2 = tr1.nextSibling;
-			var tr3 = tr2.nextSibling;
-
-			tr1.parentNode.removeChild(tr1);
-			tr2.parentNode.removeChild(tr2);
-			tr3.parentNode.removeChild(tr3);	
-		}
-
-
 	}
 
-	function hn_filter_match(text, score, filters)
-	{		
-		
-			var remove = false;
-		
-			if(score < filters["default"])
-				remove = true;
-			
-			for (x in filters) {
-			
-				if(x != "default" && text.toLowerCase().match(x)) {
-					if(score < filters[x])
-						remove = true;
-					else
-						remove = false;
-					}
-			}
-			return remove;
-	}
-
+	return remove;
+}
