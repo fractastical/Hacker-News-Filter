@@ -1,4 +1,3 @@
-//TODO: Crazy namespacing here...
 chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, function(response) {
 	var options = response.data ? JSON.parse(response.data) : { };
 	var defaultmin = options['default'] || 1;
@@ -6,7 +5,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 
 	expand_more_links(
 			function(d){ return d.querySelector('a[href^="/x?fnid"]'); },
-			5,
+			8,
 			function(){ filterDocument(defaultmin, options); }
 			);
 });
