@@ -39,19 +39,24 @@ chrome.extension.sendRequest({method: "getLocalStorage", key: "filterValues"}, f
 		if(!link) return;
 
 		var href = link.href;
-		link.parentNode.removeChild(link);
+		var table = link.parentNode.parentNode.parentNode.parentNode;
+		
+		// Remove link and spacer
+		var row = link.parentNode.parentNode;
+		var parent = link.parentNode.parentNode.parentNode;
+		parent.removeChild(row.previousSibling);
+		parent.removeChild(row);
 
-		//var tablebody = link.parentNode.parentNode;
-		//$(td).remove();
-		//jQuery.get(td.firstChild.href, function(data) {
-		//	$(data).find('table table tr').slice(4).appendTo(tablebody);
-		//});
-
-		//expand_more_link(search, --count);
+		// Follow more link and add results to the table
+		jQuery.get(href, function(data) {
+			table.appendChild($(data).find('table table tbody')[1]);
+			expand_more_link(search, --count);
+		});
 	}
 
 	function get_headline_score(link) {
 		var subtext = link.parentNode.parentNode.nextSibling;
+		if(!subtext) return 0;
 		var scoretext = subtext.querySelector('span[id^="score"]');
 		if(!scoretext) return 0;
 
