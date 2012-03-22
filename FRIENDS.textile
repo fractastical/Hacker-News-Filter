@@ -1,0 +1,26 @@
+
+With friends, you create a group and assign a point value to each item in that group 
+
+*Group:*
+
+Example 1 (topical) :
+
+bq.  "allstars" { "pg" : 4, "patio11" : 1, "edw12" : 1, "tpacek" : 1  }
+
+Example 2 (regional) :
+
+bq.  "philadelphia" : { "yegg" : 1, "aaronfeng" : 1 }
+
+
+The total point value (e.g. value of all comments on comment pages)  will be displayed to the right of the title on the main YC page.
+
+
+Process:
+
+  Load each link
+  Run through all users
+  Load 
+
+
+
+

@@ -4,17 +4,20 @@
 
 /* Each filterValue set has:
 
-   (1) Title
+   (1) title
    (2) description
    (3) values - Json String of filters
    (4) pages - Number of Pages to display
 
-  There is also an active_filter toggle.
+  There is also an activeFilter toggle.
 
 */
 
 // Saves options to localStorage.
 function save_options() {
+
+  var friends = document.getElementById("friends");
+  localStorage["friends"] = friends.value;
 
   var activeFilter = document.getElementById("activeFilter");
   localStorage["activeFilter"] = activeFilter.value;
@@ -33,7 +36,7 @@ function save_options() {
 
 // Restores select box state to saved value from localStorage.
 function restore_options() {
-	
+
   var data = localStorage["filterValues"];
   if (!data) {
 	var ob= {
@@ -68,12 +71,52 @@ function restore_options() {
 	};
 	data = JSON.stringify(ob);
   }
+
+
+  var friends = localStorage["friends"];
+  if (!friends) {
+	var frob= {
+	    "allstars": {
+	        "pg": 4
+	    },
+	    "philly": {
+	        "yegg": 1,
+	        "aaronfeng": 1
+	    },
+	    "rome": {
+	        "jd": 1
+	    },
+	    "munich": {
+	        "jd": 1,
+	        "moconnor": 1,
+	        "HSO": 1,
+	        "hessenwolf": 1,
+	        "Jakob": 1,
+	        "DrinkWater": 1,
+	        "wink": 1,
+	        "schuon": 1,
+	        "gilligan": 1,
+	        "justliving": 1,
+	        "hef19898": 1,
+	        "jwildeboer": 1,
+	        "s1rech": 1,
+	        "struppi": 1
+	    }
+	};
+	friends = JSON.stringify(frob);
+  }
+
+
 				
   var parsedData = JSON.parse(data);
   var formattedData = JSON.stringify(parsedData, null, '\t');
+  var activeFilter = document.getElementById("filterValues");
+  activeFilter.value = formattedData;
 
-  var textarea = document.getElementById("filterValues");
-  textarea.value = formattedData;
+  var parsedFriends = JSON.parse(friends);
+  var formattedFriends = JSON.stringify(parsedFriends, null, '\t');
+  var friends = document.getElementById("friends");
+  friends.value = formattedFriends;
 
   var activeFilter = document.getElementById("activeFilter");
   activeFilter.value = localStorage["activeFilter"];
@@ -90,8 +133,11 @@ function restore_options() {
 
 <p>Title of active filter:</p>
 
-<input type="text" id="activeFilter" size="30" />
+<p><input type="text" id="activeFilter" size="30" /></p>
 
+<p>Json for friends:</p>
+
+<textarea id="friends" rows="35" cols="90"></textarea>
 
 <div id="status">&nbsp;</div>
 <br>

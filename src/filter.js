@@ -89,3 +89,4 @@ function hn_filter_match(text, score, filters, defaultmin) {
 
 	return remove;
 }
+
