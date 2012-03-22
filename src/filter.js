@@ -1,8 +1,8 @@
-chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues"}, function(response) {
+chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues", key3: "friends" }, function(response) {
 
-
-	var activeFilter = response.data1 ? response.data1 : "standard";
-	var options = response.data2 ? JSON.parse(response.data2)[activeFilter] : { };
+	var activeFilter = response.value1 ? response.value1 : "standard";
+	var options = response.value2 ? JSON.parse(response.value2)[activeFilter] : { };
+	var friends = response.value3 ? JSON.parse(response.value3) : { };
 	
 	var defaultmin = options['data']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
 	var pagesToDisplay = options['pages'] || 1;
@@ -71,6 +71,14 @@ function remove_headline(link) {
 	parent.removeChild(headline.nextSibling.nextSibling);
 	parent.removeChild(headline.nextSibling);
 	parent.removeChild(headline);
+}
+
+function aggregateFriends(doc) {
+	
+	// get all links 
+	// get doc for each link
+	// parse each doc, make list of names
+	// run list of names through friends json
 }
 
 function hn_filter_match(text, score, filters, defaultmin) {
