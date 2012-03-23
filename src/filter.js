@@ -13,6 +13,8 @@ chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", k
 			pagesToDisplay,
 			function(){ filterDocument(defaultmin, options['data']); }
 			);
+			
+	aggregateFriends();
 });
 
 function filterDocument(defaultmin, filters) {
@@ -73,10 +75,48 @@ function remove_headline(link) {
 	parent.removeChild(headline);
 }
 
-function aggregateFriends(doc) {
+function aggregateFriends() {
 	
-	// get all links 
-	// get doc for each link
+	var links = document.querySelectorAll('td[class="title"] a');
+	console.log(links);
+	console.log('f');
+	console.log(friends);
+	
+	var groupScores = { };
+	
+	for(var x in links) {
+		
+		jQuery.get(links[x].href, function(data) {
+			
+			var userArray = [];
+			var spans = $(data).find('span.comhead');
+			spans.each( function(s) { 
+				console.log(s.find('a').first().value());
+				userArray.push(u.value());			
+			});
+
+			for(var group in friends) {
+				
+				var groupScore = 0;
+				for(var user in friends[group])
+				{
+					if($.inArray(friends[group][user], userArray) > -1)
+						groupScore += friends[group][user];  
+				}
+				if (groupScore > 0)
+					links[x].innerHTML += "-" + friends[group] + ":" + groupScore;
+					
+			}
+			
+			
+		});
+	
+	}
+	
+		 
+		
+
+	
 	// parse each doc, make list of names
 	// run list of names through friends json
 }

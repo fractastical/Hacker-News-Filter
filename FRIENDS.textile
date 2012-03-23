@@ -14,13 +14,14 @@ bq.  "philadelphia" : { "yegg" : 1, "aaronfeng" : 1 }
 
 The total point value (e.g. value of all comments on comment pages)  will be displayed to the right of the title on the main YC page.
 
+TODO: add something to with word count - capture mini-essays
 
 Process:
 
   Load each link
   Run through all users
   Load 
-
+  
 
 
 
