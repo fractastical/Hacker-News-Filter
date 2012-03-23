@@ -1,9 +1,10 @@
 chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues", key3: "friends" }, function(response) {
 
+	console.log('a');
+
 	var activeFilter = response.value1 ? response.value1 : "standard";
 	var options = response.value2 ? JSON.parse(response.value2)[activeFilter] : { };
 	var friends = response.value3 ? JSON.parse(response.value3) : { };
-	console.log('a');
 	
 	var defaultmin = options['data']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
 	var pagesToDisplay = options['pages'] || 1;
@@ -15,7 +16,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", k
 			function(){ filterDocument(defaultmin, options['data']); }
 			);
 			
-	aggregateFriends();
+	aggregateFriends(friends);
 });
 
 function filterDocument(defaultmin, filters) {
@@ -93,43 +94,53 @@ function hn_filter_match(text, score, filters, defaultmin) {
 	return remove;
 }
 
-function aggregateFriends() {
+function aggregateFriends(friends) {
 	
-	var links = document.querySelectorAll('td[class="title"] a');
+	var links = document.querySelector('a[href^="item?id"]');
 	console.log(links);
 	console.log('f');
 	console.log(friends);
 	
 	var groupScores = { };
 	
-	for(var x in links) {
+	$(links).each(function() {
 		
-		jQuery.get(links[x].href, function(data) {
+		console.log(this);
+		var item = this;
+		
+		jQuery.get(this.href, function(data) {
 			
 			var userArray = [];
 			var spans = $(data).find('span.comhead');
-			spans.each( function(s) { 
-				console.log(s.find('a').first().value());
-				userArray.push(u.value());			
+			spans.each( function() { 
+				console.log($(this).find('a').first().text());
+				userArray.push($(this).find('a').first().text());			
 			});
 
+			console.log('go');
+			console.log(friends);
+
 			for(var group in friends) {
-				
 				var groupScore = 0;
+				console.log('g');
+				console.log(group);
 				for(var user in friends[group])
 				{
-					if($.inArray(friends[group][user], userArray) > -1)
-						groupScore += friends[group][user];  
+					console.log(user);
+					if($.inArray(user, userArray) > -1) 
+						groupScore += 1;  
 				}
+				console.log(friends[group]);
 				if (groupScore > 0)
-					links[x].innerHTML += "-" + friends[group] + ":" + groupScore;
+					$(item).append(" " + group + ":" + groupScore);
+				console.log(item);
 					
 			}
 			
 			
 		});
 	
-	}
+	});
 	
 		 
 		
