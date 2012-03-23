@@ -6,7 +6,7 @@
 	chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 		console.log('alive');
 	    if (request.method == "getLocalStorage")
-	      sendResponse({value1: localStorage[request.key1], value2: localStorage[request.key2]},  value3: localStorage[request.key3]},);
+	      sendResponse({value1: localStorage[request.key1], value2: localStorage[request.key2], value3: localStorage[request.key3]},);
 	    else
 	      sendResponse({}); // snub them.
 	});

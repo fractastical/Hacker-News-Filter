@@ -3,6 +3,7 @@ chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", k
 	var activeFilter = response.value1 ? response.value1 : "standard";
 	var options = response.value2 ? JSON.parse(response.value2)[activeFilter] : { };
 	var friends = response.value3 ? JSON.parse(response.value3) : { };
+	console.log('a');
 	
 	var defaultmin = options['data']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
 	var pagesToDisplay = options['pages'] || 1;
@@ -30,7 +31,6 @@ function filterDocument(defaultmin, filters) {
 		}
 	}
 }
-
 
 function expand_more_links(search, count, success){
 	if(count < 2){
@@ -73,6 +73,24 @@ function remove_headline(link) {
 	parent.removeChild(headline.nextSibling.nextSibling);
 	parent.removeChild(headline.nextSibling);
 	parent.removeChild(headline);
+}
+
+
+function hn_filter_match(text, score, filters, defaultmin) {
+	
+	var remove = score < defaultmin;
+	var t = text.toLowerCase();
+
+	for (var x in filters) {
+		if(t.match(x)) {
+			if(score > filters[x])
+				remove = false;
+			else
+				remove = true;
+		}
+	}
+
+	return remove;
 }
 
 function aggregateFriends() {
@@ -121,20 +139,4 @@ function aggregateFriends() {
 	// run list of names through friends json
 }
 
-function hn_filter_match(text, score, filters, defaultmin) {
-	var remove = score < defaultmin;
-
-	var t = text.toLowerCase();
-
-	for (var x in filters) {
-		if(t.match(x)) {
-			if(score > filters[x])
-				remove = false;
-			else
-				remove = true;
-		}
-	}
-
-	return remove;
-}
 
