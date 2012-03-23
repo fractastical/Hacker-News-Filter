@@ -96,7 +96,7 @@ function hn_filter_match(text, score, filters, defaultmin) {
 
 function aggregateFriends(friends) {
 	
-	var links = document.querySelector('a[href^="item?id"]');
+	var links = document.querySelectorAll('a[href^="item?id"]');
 	console.log(links);
 	console.log('f');
 	console.log(friends);
