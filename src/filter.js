@@ -97,15 +97,11 @@ function hn_filter_match(text, score, filters, defaultmin) {
 function aggregateFriends(friends) {
 	
 	var links = document.querySelectorAll('a[href^="item?id"]');
-	console.log(links);
-	console.log('f');
-	console.log(friends);
 	
 	var groupScores = { };
 	
 	$(links).each(function() {
 		
-		console.log(this);
 		var item = this;
 		
 		jQuery.get(this.href, function(data) {
@@ -113,27 +109,19 @@ function aggregateFriends(friends) {
 			var userArray = [];
 			var spans = $(data).find('span.comhead');
 			spans.each( function() { 
-				console.log($(this).find('a').first().text());
 				userArray.push($(this).find('a').first().text());			
 			});
 
-			console.log('go');
-			console.log(friends);
 
 			for(var group in friends) {
 				var groupScore = 0;
-				console.log('g');
-				console.log(group);
 				for(var user in friends[group])
 				{
-					console.log(user);
 					if($.inArray(user, userArray) > -1) 
 						groupScore += 1;  
 				}
-				console.log(friends[group]);
 				if (groupScore > 0)
 					$(item).append(" " + group + ":" + groupScore);
-				console.log(item);
 					
 			}
 			
@@ -142,12 +130,6 @@ function aggregateFriends(friends) {
 	
 	});
 	
-		 
-		
-
-	
-	// parse each doc, make list of names
-	// run list of names through friends json
 }
 
 
