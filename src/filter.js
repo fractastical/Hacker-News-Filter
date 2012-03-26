@@ -1,7 +1,5 @@
 chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues", key3: "friends" }, function(response) {
 
-	console.log('a');
-
 	var activeFilter = response.value1 ? response.value1 : "standard";
 	var options = response.value2 ? JSON.parse(response.value2)[activeFilter] : { };
 	var friends = response.value3 ? JSON.parse(response.value3) : { };
