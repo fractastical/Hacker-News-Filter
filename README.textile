@@ -19,11 +19,7 @@ Author: "Jd":http://news.ycombinator.com/user?id=Jd ("@fractastical":https://twi
 Inspiration and first fork from "No-Bitcoin-on-HN":https://github.com/davidminor/No-Bitcoin-on-HN.git
 
 
-My setup at the moment:
+Example setup:
 
 !https://github.com/fractastical/Hacker-News-Filter/raw/master/options_example.png!
-
-
-
-
 

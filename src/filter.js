@@ -1,8 +1,10 @@
-chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues", key3: "friends" }, function(response) {
+
+chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", key2: "filterValues", key3: "friends", key4: "isFriendsActive"  }, function(response) {
 
 	var activeFilter = response.value1 ? response.value1 : "standard";
 	var options = response.value2 ? JSON.parse(response.value2)[activeFilter] : { };
 	var friends = response.value3 ? JSON.parse(response.value3) : { };
+	var isFriendsActive = response.value4 ? JSON.parse(response.value4) : { };
 	
 	var defaultmin = options['data']['default'] || (Object.keys(options).length > 0 ? 99999 : 1);
 	var pagesToDisplay = options['pages'] || 1;
@@ -14,8 +16,8 @@ chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", k
 			function(){ filterDocument(defaultmin, options['data']); }
 			);
 			
-	//disabled		
-	//aggregateFriends(friends);
+	if(isFriendsActive)	
+	    aggregateFriends(friends);
 });
 
 function filterDocument(defaultmin, filters) {
@@ -82,7 +84,7 @@ function hn_filter_match(text, score, filters, defaultmin) {
 	var t = text.toLowerCase();
 
 	for (var x in filters) {
-		if(t.match(x)) {
+		if(t.math(x)) {
 			if(score > filters[x])
 				remove = false;
 			else

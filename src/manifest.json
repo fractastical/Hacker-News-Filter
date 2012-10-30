@@ -1,6 +1,6 @@
 {
   "name": "HN Filter",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Filters stories by karma rating and keywords.",
   "background_page": "localStorageListener.html",
   "content_scripts": [{

@@ -6,7 +6,7 @@
 
    (1) title
    (2) description
-   (3) values - Json String of filters
+   (3) values - JSON String of filters
    (4) pages - Number of Pages to display
 
   There is also an activeFilter toggle.
@@ -87,7 +87,6 @@ function restore_options() {
 	        "jd": 1
 	    },
 	    "munich": {
-	        "jd": 1,
 	        "moconnor": 1,
 	        "HSO": 1,
 	        "hessenwolf": 1,
@@ -120,6 +119,9 @@ function restore_options() {
 
   var activeFilter = document.getElementById("activeFilter");
   activeFilter.value = localStorage["activeFilter"];
+
+  var isFriendsActive = document.getElementById("isFriendsActive");
+  isFriendsActive.value = localStorage["isFriendsActive"];
   
 }
 
@@ -138,6 +140,10 @@ function restore_options() {
 <p>Json for friends:</p>
 
 <textarea id="friends" rows="35" cols="90"></textarea>
+
+<p>Friends feature active?
+	
+<p>Yes <input type="checkbox" id="isFriendsActive" /></p>
 
 <div id="status">&nbsp;</div>
 <br>
