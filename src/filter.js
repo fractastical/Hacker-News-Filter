@@ -16,8 +16,8 @@ chrome.extension.sendRequest({method: "getLocalStorage", key1: "activeFilter", k
 			function(){ filterDocument(defaultmin, options['data']); }
 			);
 			
-	if(isFriendsActive)	
-	    aggregateFriends(friends);
+	//if(isFriendsActive)	
+	//    aggregateFriends(friends);
 });
 
 function filterDocument(defaultmin, filters) {
