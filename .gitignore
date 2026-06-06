@@ -1,1 +1,4 @@
 src.pem
+node_modules/
+.env
+npm-debug.log*
