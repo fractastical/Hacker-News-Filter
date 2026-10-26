@@ -1,0 +1,45 @@
+name: Post HN bioelectricity stories to Telegram
+
+on:
+  schedule:
+    # Every 2 hours (UTC). Adjust as desired: https://crontab.guru
+    - cron: "0 */2 * * *"
+  workflow_dispatch: # allow manual runs from the Actions tab
+
+# Needed so the job can commit the updated dedup state back to the repo.
+permissions:
+  contents: write
+
+concurrency:
+  group: post-to-telegram
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: node index.js
+
+      - name: Commit updated dedup state
+        run: |
+          if [[ -n "$(git status --porcelain state/posted.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add state/posted.json
+            git commit -m "chore: update posted-stories state [skip ci]"
+            git push
+          else
+            echo "No state changes to commit."
+          fi
